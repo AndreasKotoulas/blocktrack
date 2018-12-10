@@ -2,7 +2,9 @@ const path = require('path')
 const express= require('express')
 const bodyParser=require('body-parser')
 const app=express();
-const transactions= []
+const informationController = require('./controllers/information.js');
+
+
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -10,21 +12,11 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/add-information',(req, res, next)=>{
-  console.log(transactions)
-  res.sendFile(path.join(__dirname,'views','add-information.html'))
-} )
+app.get('/add-information', informationController.getAddInformation )
 
-app.post('/information',(req, res, next)=>{
-  transactions.push({ name: req.body.name, lastname: req.body.lastname})
-  res.redirect('/')
-} )
+app.post('/information',informationController.postTransaction)
 
-app.use('/',(req, res, next)=>{
-  res.render('transactions', { trans: transactions, pagetitle: 'Transactions'})
-  // console.log(transactions)
-  // res.sendFile(path.join(__dirname, 'views' ,'transactions.html'))
-} )
+app.use('/',informationController.showTransanctions )
 
 
 
