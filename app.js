@@ -15,7 +15,7 @@ app.get('/add-information', informationController.getAddInformation )
 
 app.get('/transactions/:transactionID', informationController.getTransaction)
 
-app.get('/edit-information/:transactionID', informationController.editTransaction)
+app.get('/edit-information/:transactionID', informationController.getEditTransaction)
 
 app.post('/information',informationController.postTransaction)
 

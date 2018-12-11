@@ -74,25 +74,57 @@ exports.getTransaction= (req,res,next)=>{
 
 }
 
-exports.editTransaction =(req, res, next)=>{
+exports.getEditTransaction =(req, res, next)=>{
   const tranID =req.params.transactionID
   InformationModel.findById(tranID, function (err, transaction) {
-    console.log(transaction)
+    //console.log(transaction)
     res.render('edit-information', { transaction: transaction, pagetitle: 'Edit a Transaction'})
   })
 }
 
 exports.postEditTransaction = (req, res, next) => {
     const transID= req.body.transactionID
-    const updatedname = req.body.name
-    const updatedlastname = req.body.lastname
-
+    // const updatedname = req.body.name
+    // const updatedlastname = req.body.lastname
+    let previous=''
     InformationModel.findById(transID, function (err, transaction) {
-      console.log(transaction)
-       transaction.name=updatedname
-       transaction.lastname=updatedlastname
-       transaction.save()
+        //  console.log(transaction)
+        if(err){
+          console.log('Error occured')
+        }else{
+          previous=transaction.txHash
+          console.log(previous)
+          var personalinformation= new InformationModel(req.body)
+
+          bcrypt.genSalt(saltRounds, function(err, salt)
+          {
+              bcrypt.hash(req.body.name + req.body.lastname, salt, function(err, hash)
+              {
+                      if(err){
+                        console.log('Error occured')
+                      }else{
+                        personalinformation.datahash= hash
+                        personalinformation.salt=salt
+                        personalinformation.previousHash=previous
+                        message="The data have been modified. Previous transaction hash: " + previous + " Current Data hash:" + personalinformation.datahash
+                        smart.methods.setMessage(message).send({from: '0x1928e1570D98c3f49EdAEB36047616A57A73e9f8'})
+                          .then(function(receipt)
+                          {
+                            console.log(receipt)
+                            console.log(receipt.to)
+                            console.log(receipt.transactionHash)
+                            personalinformation.txHash= receipt.transactionHash
+
+                            personalinformation.save()
+                          })
+                      }
+              });
+          });
+        }
+
+
     })
+
 
 
 }
@@ -107,7 +139,7 @@ exports.postTransaction = (req, res, next) => {
 
               personalinformation.datahash= hash
               personalinformation.salt=salt
-
+              personalinformation.previousHash=''
               smart.methods.setMessage(personalinformation.datahash).send({from: '0x1928e1570D98c3f49EdAEB36047616A57A73e9f8'})
                 .then(function(receipt)
                 {
