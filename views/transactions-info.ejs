@@ -17,21 +17,11 @@
         </nav>
       </head>
       <main>
-        <% if(trans.length > 0) { %>
-        <h1>My Transactions</h1>
-
-          <%for (let transactions of trans) {%>
-            <div class="grid">
-            <p>Name: <%=transactions.name %> </p>
-            <p>Last Name: <%=transactions.lastname %> </p>
-            <a href="/transactions/<%= transactions.id%>" class="btn">Details</a>
-            <a href="/edit-information/<%= transactions.id%>" class="btn">Edit</a>
-            </div>
-          <%}%>
-
-        <% } else {%>
-          <h1>No transactions so far</h1>
-          <%}%>
+        <div class="grid">
+        <p>Name: <%=transaction.name %> </p>
+        <p>Last Name: <%=transaction.lastname %> </p>
+      
+        </div>
       </main>
   </body>
 </html>
