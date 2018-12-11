@@ -17,9 +17,11 @@ app.get('/transactions/:transactionID', informationController.getTransaction)
 
 app.get('/edit-information/:transactionID', informationController.getEditTransaction)
 
-app.post('/information',informationController.postTransaction)
+app.post('/information', informationController.postTransaction)
 
-app.post('/edit-information',informationController.postEditTransaction)
+app.post('/edit-information', informationController.postEditTransaction)
+
+app.post('/delete-information',informationController.deleteTransaction )
 
 app.use('/',informationController.showTransanctions )
 

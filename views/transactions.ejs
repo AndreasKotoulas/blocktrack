@@ -25,9 +25,15 @@
             <p>Name: <%=transactions.name %> </p>
             <p>Last Name: <%=transactions.lastname %> </p>
             <p>TxHash:<a href="https://rinkeby.etherscan.io/tx/<%= transactions.txHash%>" target="_blank"><%=transactions.txHash %></a></p>
-
+            <%if(transactions.deleteHash!=''){%>
+            <p> Delete Hash: <a href="https://rinkeby.etherscan.io/tx/<%= transactions.deleteHash%>" target="_blank"><%=transactions.deleteHash %></a> </p>
+            <% } %>
             <a href="/transactions/<%= transactions.id%>" class="btn">Details</a>
             <a href="/edit-information/<%= transactions.id%>" class="btn">Edit</a>
+            <form class="product-form" action="/delete-information" method="POST">
+              <input type="hidden" value="<%= transactions.id%>" name="transDeleteID">
+              <button type="submit">Delete</button>
+            </form>
             </div>
           <%}%>
 

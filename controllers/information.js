@@ -20,7 +20,8 @@ var InformationModel= mongoose.model('InformationModel',{
   datahash: String,
   txHash:String,
   previousHash: String,
-  salt: String
+  salt: String,
+  deleteHash: String
 })
 
 
@@ -121,12 +122,35 @@ exports.postEditTransaction = (req, res, next) => {
               });
           });
         }
+      })
+}
 
+exports.deleteTransaction = (req, res, next) =>{
+  const transDeleteID= req.body.transDeleteID
+  //console.log(req.body.transDeleteID)
+  InformationModel.findById(transDeleteID, function (err, transaction) {
+      //  console.log(transaction)
+      if(err){
+        console.log(error)
+      }else{
+        transaction.name=''
+        transaction.lastname=''
+        transaction.salt=''
+        message='The data from the transaction hash' + transaction.txHash + 'have been removed due to GDRP'
+        smart.methods.setMessage(message).send({from: '0x1928e1570D98c3f49EdAEB36047616A57A73e9f8'})
+          .then(function(receipt)
+          {
+            console.log(receipt)
+            console.log(receipt.to)
+            console.log(receipt.transactionHash)
+            transaction.deleteHash= receipt.transactionHash
 
+            transaction.save()
+          }
+      )
+    }
     })
-
-
-
+    res.redirect('/')
 }
 
 exports.postTransaction = (req, res, next) => {
@@ -140,6 +164,7 @@ exports.postTransaction = (req, res, next) => {
               personalinformation.datahash= hash
               personalinformation.salt=salt
               personalinformation.previousHash=''
+              personalinformation.deleteHash=''
               smart.methods.setMessage(personalinformation.datahash).send({from: '0x1928e1570D98c3f49EdAEB36047616A57A73e9f8'})
                 .then(function(receipt)
                 {
