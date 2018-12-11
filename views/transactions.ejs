@@ -24,6 +24,8 @@
             <div class="grid">
             <p>Name: <%=transactions.name %> </p>
             <p>Last Name: <%=transactions.lastname %> </p>
+            <p>TxHash:<a href="https://rinkeby.etherscan.io/tx/<%= transactions.txHash%>" target="_blank"><%=transactions.txHash %></a></p>
+
             <a href="/transactions/<%= transactions.id%>" class="btn">Details</a>
             <a href="/edit-information/<%= transactions.id%>" class="btn">Edit</a>
             </div>

@@ -5,9 +5,6 @@ const app=express();
 const informationController = require('./controllers/information.js');
 
 
-
-
-
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
