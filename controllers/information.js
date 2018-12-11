@@ -107,7 +107,8 @@ exports.postEditTransaction = (req, res, next) => {
                         personalinformation.datahash= hash
                         personalinformation.salt=salt
                         personalinformation.previousHash=previous
-                        message="The data have been modified. Previous transaction hash: " + previous + " Current Data hash:" + personalinformation.datahash
+                        personalinformation.deleteHash=''
+                        message=" The data have been modified. Previous transaction hash: " + previous + " Current Data hash: " + personalinformation.datahash
                         smart.methods.setMessage(message).send({from: '0x1928e1570D98c3f49EdAEB36047616A57A73e9f8'})
                           .then(function(receipt)
                           {
@@ -136,7 +137,7 @@ exports.deleteTransaction = (req, res, next) =>{
         transaction.name=''
         transaction.lastname=''
         transaction.salt=''
-        message='The data from the transaction hash' + transaction.txHash + 'have been removed due to GDRP'
+        message=' The data from the transaction hash ' + transaction.txHash + ' have been removed due to GDRP'
         smart.methods.setMessage(message).send({from: '0x1928e1570D98c3f49EdAEB36047616A57A73e9f8'})
           .then(function(receipt)
           {
